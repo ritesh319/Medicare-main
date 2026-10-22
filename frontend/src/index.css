@@ -4,39 +4,86 @@
 
 @layer base {
   * {
-    @apply border-gray-200;
+    @apply border-slate-200;
+  }
+  html {
+    scroll-behavior: smooth;
   }
   body {
-    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+    @apply text-slate-900 font-sans antialiased;
+    background-color: #f2f7f7;
+    background-image:
+      radial-gradient(900px 420px at 100% -8%, rgba(42,157,147,.10), transparent 70%),
+      radial-gradient(700px 360px at -6% 108%, rgba(31,127,121,.08), transparent 70%);
+    background-attachment: fixed;
   }
+  :focus-visible {
+    outline: 2px solid theme('colors.primary.500');
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: theme('colors.primary.200');
+  }
+  /* Slim scrollbars */
+  * { scrollbar-width: thin; scrollbar-color: #c3d4d4 transparent; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #c3d4d4; border-radius: 8px; }
+  /* Table rows respond to hover */
+  tbody tr { transition: background-color .15s ease; }
+  tbody tr:hover { background-color: rgba(42,157,147,.05); }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-4 py-2.5 bg-gradient-to-b from-primary-500 to-primary-600 text-white text-sm font-semibold rounded-xl
+      shadow-[0_1px_2px_rgba(15,42,51,0.2),0_8px_16px_-8px_rgba(31,127,121,0.7)]
+      hover:from-primary-500 hover:to-primary-700 hover:-translate-y-px
+      active:translate-y-0 active:scale-[0.98]
+      transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-4 py-2.5 bg-white text-slate-700 text-sm font-semibold rounded-xl border border-slate-200
+      shadow-sm hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98] transition-all duration-200;
   }
   .btn-danger {
-    @apply inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-4 py-2.5 bg-gradient-to-b from-red-500 to-red-600 text-white text-sm font-semibold rounded-xl
+      shadow-[0_1px_2px_rgba(15,42,51,0.2),0_8px_16px_-8px_rgba(220,38,38,0.6)]
+      hover:to-red-700 hover:-translate-y-px active:translate-y-0 active:scale-[0.98] transition-all duration-200;
   }
   .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200;
+    @apply w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm placeholder-slate-400
+      shadow-sm hover:border-slate-300 focus:outline-none focus:ring-4 focus:ring-primary-500/15 focus:border-primary-500 transition-all duration-200;
   }
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+    @apply bg-white rounded-2xl border border-slate-200/70 p-6
+      shadow-[0_1px_2px_rgba(15,42,51,0.04),0_10px_28px_-14px_rgba(15,42,51,0.14)];
   }
   .badge-pending {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200;
   }
   .badge-confirmed {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-50 text-primary-700 ring-1 ring-inset ring-primary-200;
   }
   .badge-completed {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200;
   }
   .badge-cancelled {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-200;
+  }
+
+  /* One orchestrated entrance when a page loads: children rise in a short stagger */
+  .page-enter > * { animation: rise .5s cubic-bezier(.2,.7,.2,1) both; }
+  .page-enter > *:nth-child(2) { animation-delay: .06s; }
+  .page-enter > *:nth-child(3) { animation-delay: .12s; }
+  .page-enter > *:nth-child(4) { animation-delay: .18s; }
+  .page-enter > *:nth-child(5) { animation-delay: .24s; }
+  .page-enter > *:nth-child(n+6) { animation-delay: .3s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
