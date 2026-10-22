@@ -12,7 +12,7 @@ const statusMap = {
   CONFIRMED: 'badge-confirmed',
   COMPLETED: 'badge-completed',
   CANCELLED: 'badge-cancelled',
-  NO_SHOW:   'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700',
+  NO_SHOW:   'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 ring-1 ring-inset ring-slate-200',
 }
 
 export function StatusBadge({ status }) {
@@ -21,21 +21,21 @@ export function StatusBadge({ status }) {
 
 export function StatCard({ title, value, icon, color = 'blue', sub }) {
   const colors = {
-    blue:   'bg-blue-50 text-blue-600',
-    green:  'bg-green-50 text-green-600',
-    purple: 'bg-purple-50 text-purple-600',
-    yellow: 'bg-yellow-50 text-yellow-600',
-    red:    'bg-red-50 text-red-600',
-    teal:   'bg-teal-50 text-teal-600',
+    blue:   'bg-primary-50 text-primary-600 ring-primary-100',
+    green:  'bg-emerald-50 text-emerald-600 ring-emerald-100',
+    purple: 'bg-violet-50 text-violet-600 ring-violet-100',
+    yellow: 'bg-amber-50 text-amber-600 ring-amber-100',
+    red:    'bg-rose-50 text-rose-600 ring-rose-100',
+    teal:   'bg-primary-50 text-primary-600 ring-primary-100',
   }
   return (
-    <div className="card flex items-start gap-4">
-      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 ${colors[color]}`}>
+    <div className="card flex items-start gap-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_1px_2px_rgba(15,42,51,0.04),0_16px_32px_-14px_rgba(31,127,121,0.28)]">
+      <div className={`w-12 h-12 rounded-2xl ring-1 flex items-center justify-center text-2xl flex-shrink-0 ${colors[color]}`}>
         {icon}
       </div>
       <div>
-        <p className="text-sm text-gray-500 font-medium">{title}</p>
-        <p className="text-2xl font-bold text-gray-900 mt-0.5">{value ?? '—'}</p>
+        <p className="text-sm text-slate-500 font-medium">{title}</p>
+        <p className="text-3xl font-extrabold tracking-tight text-slate-900 mt-0.5">{value ?? '—'}</p>
         {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
       </div>
     </div>
@@ -46,8 +46,8 @@ export function Modal({ open, onClose, title, children, footer }) {
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className="absolute inset-0 bg-ink-900/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative animate-pop bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -77,13 +77,13 @@ export function EmptyState({ icon = '📭', title, description, action }) {
 export function Alert({ type = 'error', message, onDismiss }) {
   if (!message) return null
   const styles = {
-    error:   'bg-red-50 border-red-200 text-red-800',
-    success: 'bg-green-50 border-green-200 text-green-800',
-    warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-    info:    'bg-blue-50 border-blue-200 text-blue-800',
+    error:   'bg-rose-50 border-rose-200 text-rose-800',
+    success: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+    warning: 'bg-amber-50 border-amber-200 text-amber-800',
+    info:    'bg-primary-50 border-primary-200 text-primary-800',
   }
   return (
-    <div className={`flex items-start gap-3 p-3 rounded-lg border text-sm ${styles[type]}`}>
+    <div className={`flex items-start gap-3 p-3.5 rounded-xl border text-sm ${styles[type]}`}>
       <span className="flex-1">{message}</span>
       {onDismiss && (
         <button onClick={onDismiss} className="flex-shrink-0 opacity-60 hover:opacity-100">✕</button>
@@ -110,8 +110,8 @@ export function PageHeader({ title, subtitle, action }) {
   return (
     <div className="flex items-start justify-between mb-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-        {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+        <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900">{title}</h1>
+        {subtitle && <p className="text-sm text-slate-500 mt-1">{subtitle}</p>}
       </div>
       {action && <div>{action}</div>}
     </div>
