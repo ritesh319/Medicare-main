@@ -46,10 +46,6 @@ export default function LoginPage() {
             Streamlined hospital management — appointments, records, and care, all in one place.
           </p>
         </div>
-        <div className="flex gap-6 text-sm text-primary-300">
-          <span>🏥 Trusted by 500+ hospitals</span>
-          <span>👩‍⚕️ 10,000+ doctors</span>
-        </div>
       </div>
 
       {/* Right panel */}
