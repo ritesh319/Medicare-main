@@ -46,6 +46,7 @@ export default function LoginPage() {
             Streamlined hospital management — appointments, records, and care, all in one place.
           </p>
         </div>
+       <div />
       </div>
 
       {/* Right panel */}
