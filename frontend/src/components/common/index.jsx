@@ -66,7 +66,7 @@ export function Modal({ open, onClose, title, children, footer }) {
 export function EmptyState({ icon = '📭', title, description, action }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <span className="w-16 h-16 mb-4 rounded-2xl bg-primary-50 ring-1 ring-primary-100 flex items-center justify-center text-3xl">{icon}</span>
+      <span className="empty-state-icon w-16 h-16 mb-4 rounded-2xl bg-primary-50 ring-1 ring-primary-100 flex items-center justify-center text-3xl">{icon}</span>
       <h3 className="text-lg font-extrabold text-slate-900 mb-1">{title}</h3>
       {description && <p className="text-sm text-slate-500 max-w-xs mb-4">{description}</p>}
       {action}
