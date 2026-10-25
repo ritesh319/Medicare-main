@@ -29,13 +29,13 @@ export function StatCard({ title, value, icon, color = 'blue', sub }) {
     teal: 'bg-primary-50 text-primary-600 ring-primary-100',
   }
   return (
-    <div className="card group flex items-start gap-4 hover:-translate-y-1 hover:shadow-[0_18px_36px_-18px_rgba(31,127,121,0.34)]">
-      <div className={`w-12 h-12 rounded-2xl ring-1 flex items-center justify-center text-2xl flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 ${colors[color]}`}>
+    <div className="card group flex items-start gap-3 p-4 sm:gap-4 sm:p-6 hover:-translate-y-1 hover:shadow-[0_18px_36px_-18px_rgba(31,127,121,0.34)]">
+      <div className={`w-10 h-10 rounded-xl ring-1 flex items-center justify-center text-xl flex-shrink-0 transition-transform duration-300 sm:w-12 sm:h-12 sm:rounded-2xl sm:text-2xl group-hover:scale-110 group-hover:rotate-3 ${colors[color]}`}>
         {icon}
       </div>
       <div className="min-w-0">
-        <p className="text-sm text-slate-500 font-semibold truncate">{title}</p>
-        <p className="text-3xl font-extrabold tracking-tight text-slate-900 mt-0.5">{value ?? '—'}</p>
+        <p className="text-xs text-slate-500 font-semibold leading-tight sm:text-sm">{title}</p>
+        <p className="text-2xl font-extrabold tracking-tight text-slate-900 mt-0.5 sm:text-3xl">{value ?? '—'}</p>
         {sub && <p className="text-xs text-slate-400 mt-1">{sub}</p>}
       </div>
     </div>
