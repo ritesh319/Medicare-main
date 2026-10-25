@@ -24,7 +24,7 @@ const icons = {
 }
 
 function NavItem({ to, icon, label, onClick }) {
-  const base = 'group relative flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200'
+  const base = 'group relative flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200'
   if (onClick) {
     return (
       <button onClick={onClick}
@@ -38,8 +38,8 @@ function NavItem({ to, icon, label, onClick }) {
     <NavLink to={to}
       className={({ isActive }) =>
         `${base} ${isActive
-          ? 'bg-white/10 text-white'
-          : 'text-slate-300 hover:bg-white/5 hover:text-white hover:translate-x-0.5'}`
+          ? 'bg-white/[0.12] text-white shadow-[inset_0_1px_0_rgba(255,255,255,.08)]'
+          : 'text-slate-300 hover:bg-white/[0.07] hover:text-white hover:translate-x-0.5'}`
       }>
       {({ isActive }) => (
         <>
@@ -96,14 +96,17 @@ export default function DashboardLayout({ children }) {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-lg shadow-primary-900/40">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary-300 via-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-900/40 ring-1 ring-white/20">
           <Icon d={icons.doctors} className="w-5 h-5 text-white" />
         </div>
-        <span className="text-lg font-extrabold tracking-tight text-white">MediCare</span>
+        <div>
+          <span className="block text-lg font-extrabold tracking-tight text-white">MediCare</span>
+          <span className="block text-[10px] font-bold uppercase tracking-[.2em] text-primary-200/70">Care, connected</span>
+        </div>
       </div>
 
       {/* User info */}
-      <div className="mx-3 mb-3 p-3 rounded-2xl bg-white/5 border border-white/10">
+      <div className="mx-3 mb-4 p-3.5 rounded-2xl bg-gradient-to-br from-white/[0.1] to-white/[0.04] border border-white/10 shadow-inner">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-300 to-primary-600 flex items-center justify-center flex-shrink-0">
             <span className="text-white font-bold text-sm">
@@ -122,6 +125,7 @@ export default function DashboardLayout({ children }) {
       </div>
 
       {/* Nav */}
+      <div className="px-5 pb-2 text-[10px] font-bold uppercase tracking-[.2em] text-slate-500">Workspace</div>
       <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
         {navItems.map(item => (
           <NavItem key={item.to} {...item} />
@@ -136,9 +140,9 @@ export default function DashboardLayout({ children }) {
   )
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-transparent">
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 bg-ink-900 flex-shrink-0">
+      <aside className="hidden lg:flex flex-col w-64 bg-gradient-to-b from-ink-900 via-[#0d2932] to-[#092027] flex-shrink-0 shadow-[8px_0_30px_-20px_rgba(15,42,51,.65)]">
         {sidebar}
       </aside>
 
@@ -146,7 +150,7 @@ export default function DashboardLayout({ children }) {
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-ink-900/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <aside className="relative flex flex-col w-64 h-full bg-ink-900 shadow-2xl z-50 animate-pop">
+          <aside className="relative flex flex-col w-64 h-full bg-gradient-to-b from-ink-900 via-[#0d2932] to-[#092027] shadow-2xl z-50 animate-pop">
             {sidebar}
           </aside>
         </div>
@@ -155,7 +159,7 @@ export default function DashboardLayout({ children }) {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="bg-white/70 backdrop-blur-md border-b border-slate-200/70 px-4 lg:px-8 py-3.5 flex items-center justify-between lg:justify-end">
+        <header className="bg-white/75 backdrop-blur-xl border-b border-white/80 px-4 lg:px-8 py-3.5 flex items-center justify-between lg:justify-end shadow-[0_1px_0_rgba(255,255,255,.7)]">
           <button
             className="lg:hidden p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition-colors"
             onClick={() => setMobileOpen(true)}
@@ -165,13 +169,14 @@ export default function DashboardLayout({ children }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <div className="text-sm font-medium text-slate-500">
+          <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-slate-500">
+            <span className="hidden sm:inline-flex items-center gap-1.5 text-primary-700"><span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.15)]" />System operational</span>
             {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </div>
         </header>
 
         {/* Page content */}
-        <main className="page-enter flex-1 overflow-y-auto p-5 lg:p-8">
+        <main className="page-enter flex-1 overflow-y-auto p-4 sm:p-5 lg:p-8">
           {children}
         </main>
       </div>
