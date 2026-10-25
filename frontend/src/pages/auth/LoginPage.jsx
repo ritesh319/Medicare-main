@@ -47,7 +47,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left panel */}
-      <div className="hidden lg:flex relative overflow-hidden flex-col justify-between w-1/2 bg-ink-900 p-12 text-white">
+      <div className="hidden lg:flex relative overflow-hidden flex-col justify-between w-1/2 bg-gradient-to-br from-ink-900 via-[#102f39] to-[#0a2028] p-12 xl:p-16 text-white">
         {/* Soft glowing shapes */}
         <div className="absolute -top-24 -left-20 w-96 h-96 rounded-full bg-primary-500/30 blur-3xl animate-float" />
         <div className="absolute -bottom-32 -right-16 w-[28rem] h-[28rem] rounded-full bg-primary-700/40 blur-3xl animate-float [animation-delay:-7s]" />
@@ -55,6 +55,7 @@ export default function LoginPage() {
         <div className="relative"><Logo dark /></div>
 
         <div className="relative">
+          <p className="section-eyebrow text-primary-300 mb-4">The care operating system</p>
           <h1 className="text-5xl font-extrabold leading-[1.1] tracking-tight mb-5">
             Your health,<br />our priority.
           </h1>
@@ -81,11 +82,12 @@ export default function LoginPage() {
       </div>
 
       {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-white/60">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-8 bg-white/55 backdrop-blur-sm">
         <div className="w-full max-w-md animate-rise">
           {/* Mobile logo */}
           <div className="mb-8 lg:hidden"><Logo /></div>
 
+          <p className="section-eyebrow mb-2">Secure access</p>
           <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-1">Welcome back</h2>
           <p className="text-slate-500 text-sm mb-8">Sign in to your account to continue</p>
 
