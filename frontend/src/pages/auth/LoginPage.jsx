@@ -24,6 +24,7 @@ export default function LoginPage() {
   const navigate  = useNavigate()
   const location  = useLocation()
   const from = location.state?.from?.pathname || '/'
+  const notice = location.state?.message
 
   const [form, setForm]     = useState({ email: '', password: '' })
   const [error, setError]   = useState('')
@@ -108,6 +109,12 @@ export default function LoginPage() {
           <p className="section-eyebrow mb-2">Secure access</p>
           <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-1">Welcome back</h2>
           <p className="text-slate-500 text-sm mb-8">Sign in to your account to continue</p>
+
+          {notice && (
+            <div className="mb-4 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm animate-pop">
+              {notice}
+            </div>
+          )}
 
           {error && (
             <div className="mb-4 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-sm animate-pop">
