@@ -204,3 +204,12 @@
 @media (prefers-color-scheme: dark) {
   html:not(.dark) body { color-scheme: light; }
 }
+
+
+.dark .dashboard-topbar {
+  background: rgba(13, 31, 38, .88);
+  border-color: rgba(148, 190, 191, .14);
+  box-shadow: 0 1px 0 rgba(127, 210, 200, .05);
+}
+.dark .topbar-date { color: #c7dadd; }
+.dark .topbar-status { color: #9fe0c0; }
