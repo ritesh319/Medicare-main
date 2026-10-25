@@ -38,4 +38,8 @@ export const appointmentsApi = {
 
 export const adminApi = {
   getDashboardStats: () => client.get('/admin/dashboard/stats'),
+  getPendingDoctors: () => client.get('/admin/doctors/pending'),
+  getDoctorApplication: (id) => client.get(`/admin/doctors/${id}`),
+  approveDoctor: (id) => client.patch(`/admin/doctors/${id}/approve`),
+  rejectDoctor: (id) => client.patch(`/admin/doctors/${id}/reject`),
 }
