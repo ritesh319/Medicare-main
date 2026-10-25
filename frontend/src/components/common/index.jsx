@@ -1,3 +1,5 @@
+import { useTheme } from '../../context/ThemeContext'
+
 export function LoadingSpinner({ size = 'md', className = '' }) {
   const sizes = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12' }
   return (
@@ -108,5 +110,30 @@ export function PageHeader({ title, subtitle, action }) {
       </div>
       {action && <div className="flex-shrink-0">{action}</div>}
     </div>
+  )
+}
+
+export function ThemeToggle({ compact = false }) {
+  const { isDark, toggleTheme } = useTheme()
+
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className={`theme-toggle ${compact ? 'theme-toggle-compact' : ''}`}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {isDark ? (
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" /><path strokeLinecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42" />
+        </svg>
+      ) : (
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.7 6.7 0 0 0 9.8 9.8Z" />
+        </svg>
+      )}
+      {!compact && <span>{isDark ? 'Light mode' : 'Dark mode'}</span>}
+    </button>
   )
 }
