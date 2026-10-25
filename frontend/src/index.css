@@ -213,3 +213,11 @@
 }
 .dark .topbar-date { color: #c7dadd; }
 .dark .topbar-status { color: #9fe0c0; }
+
+
+.dark .empty-state-icon {
+  background: rgba(42, 157, 147, .16);
+  box-shadow: inset 0 0 0 1px rgba(127, 210, 200, .16);
+}
+.dark .empty-state-icon + h3 { color: #edf7f7; }
+.dark .empty-state-icon + h3 + p { color: #a9c0c4; }
