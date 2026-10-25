@@ -28,6 +28,7 @@ export default function LoginPage() {
   const [form, setForm]     = useState({ email: '', password: '' })
   const [error, setError]   = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }))
 
@@ -129,15 +130,22 @@ export default function LoginPage() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
-              <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                required
-                placeholder="••••••••"
-                className="input-field"
-              />
+                <div className="relative">
+                  <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                  placeholder="••••••••"
+                  className="input-field pr-12"
+                  />
+                  <button type="button" onClick={() => setShowPassword(value => !value)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg text-slate-400 hover:text-primary-600 hover:bg-primary-50 transition-colors"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                    {showPassword ? '🙈' : '👁'}
+                  </button>
+                </div>
             </div>
 
             <button type="submit" disabled={loading} className="btn-primary w-full py-3 text-base">
