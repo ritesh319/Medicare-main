@@ -160,7 +160,7 @@ export default function DashboardLayout({ children }) {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="bg-white/75 backdrop-blur-xl border-b border-white/80 px-4 lg:px-8 py-3.5 flex items-center justify-between lg:justify-end shadow-[0_1px_0_rgba(255,255,255,.7)]">
+        <header className="dashboard-topbar bg-white/75 backdrop-blur-xl border-b border-white/80 px-4 lg:px-8 py-3.5 flex items-center justify-between lg:justify-end shadow-[0_1px_0_rgba(255,255,255,.7)]">
           <div className="lg:hidden flex items-center gap-2.5">
             <button
               className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition-colors"
@@ -178,9 +178,9 @@ export default function DashboardLayout({ children }) {
               <span className="text-sm font-extrabold tracking-tight text-ink-900">MediCare</span>
             </div>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-semibold text-slate-500">
+          <div className="topbar-date flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-semibold text-slate-500">
             <ThemeToggle compact />
-            <span className="hidden sm:inline-flex items-center gap-1.5 text-primary-700"><span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.15)]" />System operational</span>
+            <span className="topbar-status hidden sm:inline-flex items-center gap-1.5 text-primary-700"><span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.15)]" />System operational</span>
             {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </div>
         </header>
