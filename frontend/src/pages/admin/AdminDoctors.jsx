@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import { LoadingSpinner, PageHeader, EmptyState, Modal, Alert } from '../../components/common'
-import { doctorsApi } from '../../api'
+import { doctorsApi, adminApi } from '../../api'
 
 export default function AdminDoctors() {
   const [doctors, setDoctors]   = useState([])
+  const [pending, setPending] = useState([])
   const [loading, setLoading]   = useState(true)
   const [search, setSearch]     = useState('')
   const [selected, setSelected] = useState(null)
@@ -15,10 +16,20 @@ export default function AdminDoctors() {
   async function fetchDoctors() {
     try {
       setLoading(true)
-      const data = await doctorsApi.getAll()
+      const [data, applications] = await Promise.all([doctorsApi.getAll(), adminApi.getPendingDoctors()])
       setDoctors(data)
+      setPending(applications)
     } catch (e) { setError(e.message) }
     finally { setLoading(false) }
+  }
+
+
+  async function decide(id, approved) {
+    try {
+      const updated = approved ? await adminApi.approveDoctor(id) : await adminApi.rejectDoctor(id)
+      setPending(ps => ps.filter(d => d.id !== id))
+      setDoctors(ds => ds.map(d => d.id === id ? updated : d))
+    } catch (e) { setError(e.message) }
   }
 
   async function toggleStatus(id) {
@@ -45,6 +56,13 @@ export default function AdminDoctors() {
       <PageHeader title="Manage Doctors" subtitle={`${doctors.length} doctors registered`} />
 
       {error && <Alert message={error} onDismiss={() => setError('')} className="mb-4" />}
+
+      {pending.length > 0 && (
+        <div className="card mb-5 border border-amber-200 bg-amber-50/50">
+          <div className="flex items-center justify-between mb-3"><h2 className="font-semibold text-amber-900">Pending doctor applications</h2><span className="text-xs text-amber-700">{pending.length} awaiting review</span></div>
+          <div className="space-y-3">{pending.map(d => <div key={d.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white p-3"><div><p className="font-medium text-gray-900">Dr. {d.firstName} {d.lastName}</p><p className="text-xs text-gray-500">{d.specialization} · {d.qualification} · {d.licenseNumber}</p></div><div className="flex items-center gap-3 text-sm">{d.proofDocumentUrl && <a href={d.proofDocumentUrl} target="_blank" rel="noreferrer" className="text-blue-600 font-medium">View proof</a>}<button onClick={() => decide(d.id, true)} className="text-green-700 font-medium">Approve</button><button onClick={() => decide(d.id, false)} className="text-red-700 font-medium">Reject</button></div></div>)}</div>
+        </div>
+      )}
 
       {/* Search */}
       <div className="mb-5">
@@ -87,8 +105,8 @@ export default function AdminDoctors() {
                     <td className="py-3 px-4 text-gray-600">{d.experienceYears ? `${d.experienceYears} yr` : '—'}</td>
                     <td className="py-3 px-4 text-gray-600">{d.consultationFee ? `$${d.consultationFee}` : '—'}</td>
                     <td className="py-3 px-4">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${d.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                        {d.active ? 'Active' : 'Inactive'}
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${d.approvalStatus === 'PENDING' ? 'bg-amber-100 text-amber-700' : d.approvalStatus === 'REJECTED' ? 'bg-red-100 text-red-700' : d.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                        {d.approvalStatus === 'PENDING' ? 'Pending' : d.approvalStatus === 'REJECTED' ? 'Rejected' : d.active ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td className="py-3 px-4">
@@ -124,6 +142,8 @@ export default function AdminDoctors() {
             <Row label="Department" value={selected.department || '—'} />
             <Row label="Experience" value={selected.experienceYears ? `${selected.experienceYears} years` : '—'} />
             <Row label="Fee" value={selected.consultationFee ? `$${selected.consultationFee}` : '—'} />
+            <Row label="Approval" value={selected.approvalStatus || 'APPROVED (legacy)'} />
+            {selected.proofDocumentUrl && <Row label="Proof" value={<a className="text-blue-600" href={selected.proofDocumentUrl} target="_blank" rel="noreferrer">Open document</a>} />}
             {selected.bio && (
               <div>
                 <span className="font-medium text-gray-600">Bio:</span>
