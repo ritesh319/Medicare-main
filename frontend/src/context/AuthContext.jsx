@@ -25,6 +25,10 @@ export function AuthProvider({ children }) {
     return data
   }, [])
 
+  const registerDoctor = useCallback(async (formData) => {
+    return authApi.registerDoctor(formData)
+  }, [])
+
   const register = useCallback(async (payload) => {
     const data = await authApi.register(payload)
     localStorage.setItem('hospital_token', data.token)
@@ -50,7 +54,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, login, register, logout,
+      user, loading, login, register, registerDoctor, logout,
       hasRole, isAdmin, isDoctor, isPatient,
       token: localStorage.getItem('hospital_token'),
     }}>
