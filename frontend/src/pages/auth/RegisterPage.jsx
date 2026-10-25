@@ -39,19 +39,25 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+      <div className="absolute -top-32 -right-24 w-96 h-96 rounded-full bg-primary-300/20 blur-3xl" />
+      <div className="absolute -bottom-40 -left-20 w-[28rem] h-[28rem] rounded-full bg-sky-200/25 blur-3xl" />
       <div className="w-full max-w-lg">
         {/* Logo */}
-        <div className="flex items-center gap-2 justify-center mb-8">
-          <div className="w-9 h-9 bg-primary-600 rounded-xl flex items-center justify-center">
-            <span className="text-white font-bold text-lg">M</span>
+        <div className="flex items-center gap-3 justify-center mb-8 relative">
+          <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-700 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-900/20">
+            <span className="text-white font-extrabold text-lg">+</span>
           </div>
-          <span className="font-bold text-gray-900 text-xl">MediCare</span>
+          <div>
+            <span className="block font-extrabold tracking-tight text-slate-900 text-xl">MediCare</span>
+            <span className="block text-[10px] font-bold uppercase tracking-[.2em] text-primary-600">Care, connected</span>
+          </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1">Create an account</h2>
-          <p className="text-gray-500 text-sm mb-6">Join MediCare today</p>
+        <div className="relative bg-white/90 rounded-3xl shadow-[0_24px_70px_-30px_rgba(15,42,51,.34)] border border-white/80 p-6 sm:p-8 backdrop-blur-xl animate-rise">
+          <p className="section-eyebrow mb-2">Patient portal</p>
+          <h2 className="text-2xl font-extrabold text-slate-900 mb-1">Create an account</h2>
+          <p className="text-slate-500 text-sm mb-6">Join a calmer, more connected care experience.</p>
 
           {error && (
             <div className="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
