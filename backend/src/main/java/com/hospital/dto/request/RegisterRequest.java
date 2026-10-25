@@ -32,10 +32,15 @@ public class RegisterRequest {
             message = "Password must include one uppercase letter and one special character")
     private String password;
 
-    @Pattern(regexp = "^[+]?[0-9]{10,15}$", message = "Invalid phone number")
+    @NotBlank(message = "Phone number is required")
+    @Pattern(
+            regexp = "^[+]?[0-9]{10,15}$",
+            message = "Invalid phone number")
     private String phone;
 
     @NotBlank(message = "Role is required")
-    @Pattern(regexp = "PATIENT|DOCTOR", message = "Role must be PATIENT or DOCTOR")
+    @Pattern(
+            regexp = "PATIENT|DOCTOR",
+            message = "Role must be PATIENT or DOCTOR")
     private String role;
 }
