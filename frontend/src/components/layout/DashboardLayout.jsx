@@ -160,15 +160,23 @@ export default function DashboardLayout({ children }) {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top bar */}
         <header className="bg-white/75 backdrop-blur-xl border-b border-white/80 px-4 lg:px-8 py-3.5 flex items-center justify-between lg:justify-end shadow-[0_1px_0_rgba(255,255,255,.7)]">
-          <button
-            className="lg:hidden p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition-colors"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Open menu"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+          <div className="lg:hidden flex items-center gap-2.5">
+            <button
+              className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 transition-colors"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary-400 to-primary-700 flex items-center justify-center">
+                <Icon d={icons.doctors} className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-sm font-extrabold tracking-tight text-ink-900">MediCare</span>
+            </div>
+          </div>
           <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-slate-500">
             <span className="hidden sm:inline-flex items-center gap-1.5 text-primary-700"><span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.15)]" />System operational</span>
             {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
