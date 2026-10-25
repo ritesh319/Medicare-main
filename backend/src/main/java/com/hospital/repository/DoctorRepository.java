@@ -15,6 +15,7 @@ public interface DoctorRepository extends MongoRepository<Doctor, String> {
     boolean existsByLicenseNumber(String licenseNumber);
     List<Doctor> findBySpecializationIgnoreCase(String specialization);
     List<Doctor> findByActiveTrue();
+    List<Doctor> findByApprovalStatus(String approvalStatus);
     List<Doctor> findByDepartmentIgnoreCase(String department);
     List<Doctor> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
         String firstName, String lastName);
