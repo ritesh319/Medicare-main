@@ -30,14 +30,14 @@ export default function AdminDashboard() {
       {loading ? <LoadingSpinner /> : (
         <>
           {/* Stats grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
             <StatCard title="Total Patients"  value={stats?.totalPatients}     icon="🧑‍🤝‍🧑" color="blue"   />
             <StatCard title="Total Doctors"   value={stats?.totalDoctors}      icon="👨‍⚕️" color="green"  />
             <StatCard title="Appointments"    value={stats?.totalAppointments} icon="📅" color="purple" />
             <StatCard title="Today"           value={stats?.todaysAppointments} icon="🗓" color="yellow" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
             <StatCard title="Pending"   value={stats?.pendingAppointments}   icon="⏳" color="yellow" />
             <StatCard title="Confirmed" value={stats?.confirmedAppointments} icon="✅" color="blue"   />
             <StatCard title="Completed" value={stats?.completedAppointments} icon="🎯" color="green"  />
