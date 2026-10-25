@@ -39,7 +39,7 @@ export default function PatientDashboard() {
 
       {loading ? <LoadingSpinner /> : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
             <StatCard title="Total Appointments" value={appointments.length}              icon="📅" color="blue"   />
             <StatCard title="Upcoming"           value={upcoming.length}                  icon="🗓" color="green"  />
             <StatCard title="Completed Visits"   value={completed}                        icon="✅" color="teal"   />
