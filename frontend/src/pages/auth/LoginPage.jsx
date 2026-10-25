@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { ThemeToggle } from '../../components/common'
 
 const HEART = 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z'
 
@@ -45,7 +46,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="relative min-h-screen flex flex-col lg:flex-row">
+      <div className="absolute top-4 right-4 z-20"><ThemeToggle compact /></div>
       {/* Left panel */}
       <div className="hidden lg:flex relative overflow-hidden flex-col justify-between w-1/2 bg-gradient-to-br from-ink-900 via-[#102f39] to-[#0a2028] p-12 xl:p-16 text-white">
         {/* Soft glowing shapes */}
