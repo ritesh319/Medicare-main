@@ -82,7 +82,7 @@ export default function LoginPage() {
       </div>
 
       {/* Compact brand story for phones: the desktop left panel becomes a visual hero above the form. */}
-      <div className="lg:hidden relative min-h-[236px] overflow-hidden bg-gradient-to-br from-ink-900 via-[#102f39] to-[#0a2028] px-6 pt-7 pb-6 text-white">
+      <div className="lg:hidden relative min-h-[250px] overflow-hidden bg-gradient-to-br from-ink-900 via-[#102f39] to-[#0a2028] px-6 pt-7 pb-5 text-white">
         <div className="absolute -top-20 -right-16 w-64 h-64 rounded-full bg-primary-500/25 blur-3xl" />
         <div className="absolute -bottom-24 -left-12 w-64 h-64 rounded-full bg-primary-700/35 blur-3xl" />
         <div className="relative flex items-center justify-between">
@@ -94,7 +94,7 @@ export default function LoginPage() {
           <h1 className="text-3xl font-extrabold leading-tight tracking-tight">Your health, our priority.</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-300">Appointments, records, and care — all in one calm workspace.</p>
         </div>
-        <svg viewBox="0 0 640 120" className="absolute bottom-1 left-0 w-full h-14 opacity-70" fill="none" aria-hidden="true">
+        <svg viewBox="0 0 640 120" className="relative mt-4 -mx-1 block w-[calc(100%+8px)] h-8 opacity-70" fill="none" aria-hidden="true">
           <path d="M0 60 H120 L140 60 L155 20 L175 100 L190 40 L205 60 H400 L420 60 L435 20 L455 100 L470 40 L485 60 H640" pathLength="1000" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1000" className="text-primary-300 animate-ecg" />
         </svg>
       </div>
