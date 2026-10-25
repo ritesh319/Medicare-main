@@ -40,6 +40,10 @@ public class Doctor {
     private double consultationFee;
     private String profileImageUrl;
 
+    private String approvalStatus;
+    private String proofDocumentUrl;
+    private String proofDocumentPublicId;
+
     @Builder.Default
     private List<Availability> availabilitySchedule = new ArrayList<>();
 
