@@ -45,7 +45,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left panel */}
       <div className="hidden lg:flex relative overflow-hidden flex-col justify-between w-1/2 bg-gradient-to-br from-ink-900 via-[#102f39] to-[#0a2028] p-12 xl:p-16 text-white">
         {/* Soft glowing shapes */}
@@ -81,12 +81,27 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-8 bg-white/55 backdrop-blur-sm">
-        <div className="w-full max-w-md animate-rise">
-          {/* Mobile logo */}
-          <div className="mb-8 lg:hidden"><Logo /></div>
+      {/* Compact brand story for phones: the desktop left panel becomes a visual hero above the form. */}
+      <div className="lg:hidden relative min-h-[236px] overflow-hidden bg-gradient-to-br from-ink-900 via-[#102f39] to-[#0a2028] px-6 pt-7 pb-6 text-white">
+        <div className="absolute -top-20 -right-16 w-64 h-64 rounded-full bg-primary-500/25 blur-3xl" />
+        <div className="absolute -bottom-24 -left-12 w-64 h-64 rounded-full bg-primary-700/35 blur-3xl" />
+        <div className="relative flex items-center justify-between">
+          <Logo dark />
+          <span className="rounded-full border border-primary-300/30 bg-primary-300/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[.16em] text-primary-200">Care, connected</span>
+        </div>
+        <div className="relative mt-8 max-w-sm">
+          <p className="section-eyebrow text-primary-300 mb-2">The care operating system</p>
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tight">Your health, our priority.</h1>
+          <p className="mt-2 text-sm leading-relaxed text-slate-300">Appointments, records, and care — all in one calm workspace.</p>
+        </div>
+        <svg viewBox="0 0 640 120" className="absolute bottom-1 left-0 w-full h-14 opacity-70" fill="none" aria-hidden="true">
+          <path d="M0 60 H120 L140 60 L155 20 L175 100 L190 40 L205 60 H400 L420 60 L435 20 L455 100 L470 40 L485 60 H640" pathLength="1000" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1000" className="text-primary-300 animate-ecg" />
+        </svg>
+      </div>
 
+      {/* Right panel */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-8 lg:min-h-screen bg-white/55 backdrop-blur-sm">
+        <div className="w-full max-w-md animate-rise">
           <p className="section-eyebrow mb-2">Secure access</p>
           <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-1">Welcome back</h2>
           <p className="text-slate-500 text-sm mb-8">Sign in to your account to continue</p>
