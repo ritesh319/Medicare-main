@@ -2,6 +2,7 @@ package com.hospital.controller;
 
 import com.hospital.dto.request.LoginRequest;
 import com.hospital.dto.request.RegisterRequest;
+import com.hospital.dto.request.DoctorRegistrationRequest;
 import com.hospital.dto.response.ApiResponse;
 import com.hospital.dto.response.AuthResponse;
 import com.hospital.service.AuthService;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,6 +26,12 @@ public class AuthController {
         AuthResponse response = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Registration successful", response));
+    }
+
+    @PostMapping(value = "/register-doctor", consumes = "multipart/form-data")
+    public ResponseEntity<ApiResponse<Void>> registerDoctor(@Valid @ModelAttribute DoctorRegistrationRequest request, @RequestPart("proofDocument") MultipartFile proofDocument) {
+        authService.registerDoctor(request, proofDocument);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Doctor application submitted for admin approval", null));
     }
 
     @PostMapping("/login")
