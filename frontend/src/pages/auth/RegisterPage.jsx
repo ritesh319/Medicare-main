@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { ThemeToggle } from '../../components/common'
 
 export default function RegisterPage() {
   const { register } = useAuth()
@@ -40,6 +41,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+      <div className="absolute top-4 right-4 z-20"><ThemeToggle compact /></div>
       <div className="absolute -top-32 -right-24 w-96 h-96 rounded-full bg-primary-300/20 blur-3xl" />
       <div className="absolute -bottom-40 -left-20 w-[28rem] h-[28rem] rounded-full bg-sky-200/25 blur-3xl" />
       <div className="w-full max-w-lg">
