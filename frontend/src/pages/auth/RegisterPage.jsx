@@ -9,22 +9,28 @@ export default function RegisterPage() {
 
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '',
-    password: '', confirmPassword: '', phone: '', role: 'PATIENT',
+    password: '', confirmPassword: '', phone: '', role: '',
   })
   const [error, setError]     = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handleChange = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }))
 
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim() || !form.password || !form.confirmPassword || !form.role) {
+      setError('Please complete all required fields')
+      return
+    }
     if (form.password !== form.confirmPassword) {
       setError('Passwords do not match')
       return
     }
-    if (form.password.length < 8) {
-      setError('Password must be at least 8 characters')
+    if (form.password.length < 8 || !/[A-Z]/.test(form.password) || !/[^A-Za-z0-9]/.test(form.password)) {
+      setError('Password must be at least 8 characters and include one uppercase letter and one special character')
       return
     }
     setLoading(true)
@@ -70,19 +76,19 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">First name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">First name <span className="text-rose-500">*</span></label>
                 <input name="firstName" value={form.firstName} onChange={handleChange}
                   required className="input-field" placeholder="John" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Last name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Last name <span className="text-rose-500">*</span></label>
                 <input name="lastName" value={form.lastName} onChange={handleChange}
                   required className="input-field" placeholder="Doe" />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email address <span className="text-rose-500">*</span></label>
               <input type="email" name="email" value={form.email} onChange={handleChange}
                 required className="input-field" placeholder="you@example.com" />
             </div>
@@ -94,24 +100,40 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Register as</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Register as <span className="text-rose-500">*</span></label>
               <select name="role" value={form.role} onChange={handleChange}
-                className="input-field">
+                required className="input-field">
+                <option value="" disabled>Select your role</option>
                 <option value="PATIENT">Patient</option>
                 <option value="DOCTOR">Doctor</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input type="password" name="password" value={form.password} onChange={handleChange}
-                required className="input-field" placeholder="Min. 8 characters" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Password <span className="text-rose-500">*</span></label>
+              <div className="relative">
+                <input type={showPassword ? 'text' : 'password'} name="password" value={form.password} onChange={handleChange}
+                  required minLength={8} className="input-field pr-12" placeholder="Min. 8 characters" />
+                <button type="button" onClick={() => setShowPassword(value => !value)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg text-slate-400 hover:text-primary-600 hover:bg-primary-50 transition-colors"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                  {showPassword ? '🙈' : '👁'}
+                </button>
+              </div>
+              <p className="mt-1.5 text-xs text-slate-400">Use 8+ characters with one uppercase letter and one special character.</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
-              <input type="password" name="confirmPassword" value={form.confirmPassword}
-                onChange={handleChange} required className="input-field" placeholder="Repeat password" />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm password <span className="text-rose-500">*</span></label>
+              <div className="relative">
+                <input type={showConfirmPassword ? 'text' : 'password'} name="confirmPassword" value={form.confirmPassword}
+                  onChange={handleChange} required minLength={8} className="input-field pr-12" placeholder="Repeat password" />
+                <button type="button" onClick={() => setShowConfirmPassword(value => !value)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg text-slate-400 hover:text-primary-600 hover:bg-primary-50 transition-colors"
+                  aria-label={showConfirmPassword ? 'Hide confirmation password' : 'Show confirmation password'}>
+                  {showConfirmPassword ? '🙈' : '👁'}
+                </button>
+              </div>
             </div>
 
             <button type="submit" disabled={loading} className="btn-primary w-full py-2.5 text-base mt-2">
