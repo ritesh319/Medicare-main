@@ -70,7 +70,7 @@ export default function DoctorAvailability() {
         <>
           <div className="card overflow-hidden p-0">
             <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
-              <div className="grid grid-cols-12 gap-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <div className="hidden sm:grid grid-cols-12 gap-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                 <div className="col-span-2">Day</div>
                 <div className="col-span-2">Available</div>
                 <div className="col-span-2">Start Time</div>
@@ -81,13 +81,13 @@ export default function DoctorAvailability() {
             <div className="divide-y divide-gray-50">
               {schedule.map(day => (
                 <div key={day.dayOfWeek}
-                  className={`px-6 py-4 grid grid-cols-12 gap-4 items-center ${!day.available ? 'opacity-50 bg-gray-50' : ''}`}>
-                  <div className="col-span-2">
+                  className={`px-4 sm:px-6 py-4 grid grid-cols-2 sm:grid-cols-12 gap-3 sm:gap-4 items-center ${!day.available ? 'opacity-50 bg-gray-50' : ''}`}>
+                  <div className="col-span-1 sm:col-span-2">
                     <span className="text-sm font-semibold text-gray-800">
                       {day.dayOfWeek.charAt(0) + day.dayOfWeek.slice(1).toLowerCase()}
                     </span>
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1 sm:col-span-2">
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input type="checkbox" checked={day.available}
                         onChange={e => updateDay(day.dayOfWeek, 'available', e.target.checked)}
@@ -98,17 +98,17 @@ export default function DoctorAvailability() {
                         after:transition-all peer-checked:after:translate-x-5" />
                     </label>
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1 sm:col-span-2">
                     <input type="time" value={day.startTime} disabled={!day.available}
                       onChange={e => updateDay(day.dayOfWeek, 'startTime', e.target.value)}
                       className="input-field text-sm py-1.5 disabled:cursor-not-allowed" />
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1 sm:col-span-2">
                     <input type="time" value={day.endTime} disabled={!day.available}
                       onChange={e => updateDay(day.dayOfWeek, 'endTime', e.target.value)}
                       className="input-field text-sm py-1.5 disabled:cursor-not-allowed" />
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-2 sm:col-span-2">
                     <select value={day.slotDurationMinutes} disabled={!day.available}
                       onChange={e => updateDay(day.dayOfWeek, 'slotDurationMinutes', Number(e.target.value))}
                       className="input-field text-sm py-1.5 disabled:cursor-not-allowed">
