@@ -32,6 +32,12 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) { return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage()); }
+
+    @ExceptionHandler(DoctorApprovalException.class)
+    public ResponseEntity<ErrorResponse> handleDoctorApproval(DoctorApprovalException ex) { return buildErrorResponse(ex.getStatus(), ex.getMessage()); }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(
             BadCredentialsException ex) {
