@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { ThemeToggle } from '../common'
 
 function Icon({ d, className = 'w-5 h-5' }) {
   return (
@@ -177,7 +178,8 @@ export default function DashboardLayout({ children }) {
               <span className="text-sm font-extrabold tracking-tight text-ink-900">MediCare</span>
             </div>
           </div>
-          <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-slate-500">
+          <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-semibold text-slate-500">
+            <ThemeToggle compact />
             <span className="hidden sm:inline-flex items-center gap-1.5 text-primary-700"><span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,.15)]" />System operational</span>
             {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </div>
