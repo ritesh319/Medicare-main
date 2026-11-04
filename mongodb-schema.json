@@ -138,7 +138,7 @@
       "indexes": [
         { "key": { "patientId": 1, "appointmentDate": -1 } },
         { "key": { "doctorId": 1, "appointmentDate": 1, "status": 1 } },
-        { "key": { "doctorId": 1, "appointmentDate": 1, "timeSlot": 1 } }
+        { "key": { "doctorId": 1, "appointmentDate": 1, "timeSlot": 1 }, "name": "unique_active_doctor_slot", "unique": true, "partialFilterExpression": { "status": { "$in": ["PENDING", "CONFIRMED", "NO_SHOW"] } } }
       ]
     }
   }
