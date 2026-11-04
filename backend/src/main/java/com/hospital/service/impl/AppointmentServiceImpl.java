@@ -17,9 +17,14 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.EnumSet;
 import java.util.List;
 
 @Service
@@ -46,6 +51,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor", "id", doctorId));
 
+        validateRequestedSlot(doctor, request);
+
         boolean slotTaken = appointmentRepository
                 .existsByDoctorIdAndAppointmentDateAndTimeSlotAndStatusNot(
                         request.getDoctorId(),
@@ -56,6 +63,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (slotTaken) {
             throw new AppointmentConflictException(
                     "The selected time slot is already booked. Please choose another slot.");
+        }
+
+        boolean patientHasConflict = appointmentRepository
+                .existsByPatientIdAndAppointmentDateAndStatusNotAndStartTimeLessThanAndEndTimeGreaterThan(
+                        patientId,
+                        request.getAppointmentDate(),
+                        AppointmentStatus.CANCELLED,
+                        request.getEndTime(),
+                        request.getStartTime());
+
+        if (patientHasConflict) {
+            throw new AppointmentConflictException(
+                    "You already have another appointment during this time.");
         }
 
         Appointment appointment = Appointment.builder()
@@ -82,7 +102,64 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (appointment == null) {
             throw new IllegalStateException("Failed to create appointment");
         }
-        return appointmentRepository.save(appointment);
+        try {
+            return appointmentRepository.save(appointment);
+        } catch (DuplicateKeyException ex) {
+            throw new AppointmentConflictException(
+                    "The selected time slot was just booked by another patient. Please choose another slot.");
+        }
+    }
+
+    private void validateRequestedSlot(Doctor doctor, AppointmentRequest request) {
+        if (!doctor.isActive()) {
+            throw new IllegalArgumentException("This doctor is not currently accepting appointments.");
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime start;
+        LocalTime end;
+        try {
+            start = LocalTime.parse(request.getStartTime(), formatter);
+            end = LocalTime.parse(request.getEndTime(), formatter);
+        } catch (DateTimeParseException ex) {
+            throw new IllegalArgumentException("Appointment times must use HH:mm format.");
+        }
+
+        if (!start.isBefore(end)) {
+            throw new IllegalArgumentException("Appointment start time must be before the end time.");
+        }
+
+        String expectedTimeSlot = request.getStartTime() + "-" + request.getEndTime();
+        if (!expectedTimeSlot.equals(request.getTimeSlot())) {
+            throw new IllegalArgumentException("The selected time slot does not match the appointment times.");
+        }
+
+        Doctor.Availability availability = doctor.getAvailabilitySchedule() == null
+                ? null
+                : doctor.getAvailabilitySchedule().stream()
+                        .filter(item -> item.isAvailable()
+                                && item.getDayOfWeek().equalsIgnoreCase(
+                                        request.getAppointmentDate().getDayOfWeek().name()))
+                        .findFirst()
+                        .orElse(null);
+
+        if (availability == null) {
+            throw new IllegalArgumentException("The doctor is not available on the selected date.");
+        }
+
+        LocalTime scheduleStart = LocalTime.parse(availability.getStartTime(), formatter);
+        LocalTime scheduleEnd = LocalTime.parse(availability.getEndTime(), formatter);
+        int durationMinutes = availability.getSlotDurationMinutes();
+        long offsetMinutes = java.time.Duration.between(scheduleStart, start).toMinutes();
+
+        if (durationMinutes <= 0
+                || start.isBefore(scheduleStart)
+                || end.isAfter(scheduleEnd)
+                || offsetMinutes < 0
+                || offsetMinutes % durationMinutes != 0
+                || !start.plusMinutes(durationMinutes).equals(end)) {
+            throw new IllegalArgumentException("The selected time is not a valid available slot.");
+        }
     }
 
     @Override
@@ -102,14 +179,39 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = getAppointmentById(id);
 
         if (request.getStatus() != null) {
-            appointment.setStatus(AppointmentStatus.valueOf(request.getStatus()));
+            AppointmentStatus nextStatus;
+            try {
+                nextStatus = AppointmentStatus.valueOf(request.getStatus().toUpperCase());
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException("Invalid appointment status.");
+            }
+
+            if (EnumSet.of(AppointmentStatus.PENDING, AppointmentStatus.CONFIRMED,
+                    AppointmentStatus.NO_SHOW).contains(nextStatus)
+                    && appointmentRepository.existsByDoctorIdAndAppointmentDateAndTimeSlotAndStatusInAndIdNot(
+                            appointment.getDoctorId(),
+                            appointment.getAppointmentDate(),
+                            appointment.getTimeSlot(),
+                            EnumSet.of(AppointmentStatus.PENDING, AppointmentStatus.CONFIRMED,
+                                    AppointmentStatus.NO_SHOW),
+                            appointment.getId())) {
+                throw new AppointmentConflictException(
+                        "The selected time slot is already occupied by another appointment.");
+            }
+
+            appointment.setStatus(nextStatus);
         }
         if (request.getDiagnosis() != null) appointment.setDiagnosis(request.getDiagnosis());
         if (request.getPrescription() != null) appointment.setPrescription(request.getPrescription());
         if (request.getNotes() != null) appointment.setNotes(request.getNotes());
 
         appointment.setUpdatedAt(LocalDateTime.now());
-        return appointmentRepository.save(appointment);
+        try {
+            return appointmentRepository.save(appointment);
+        } catch (DuplicateKeyException ex) {
+            throw new AppointmentConflictException(
+                    "The selected time slot is already occupied by another appointment.");
+        }
     }
 
     @Override
@@ -179,11 +281,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_DOCTOR"));
     }
 
-    /**
-     * A PATIENT may only act on appointments/records tied to their own email. ADMIN
-     * (and any caller that isn't a PATIENT) is unrestricted here, matching the existing
-     * @PreAuthorize rules on the controller endpoints.
-     */
+
     private void assertCallerOwnsPatientEmail(String recordEmail) {
         if (isCallerPatient()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -194,11 +292,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
-    /**
-     * A DOCTOR may only act on appointments assigned to their own doctor profile. ADMIN
-     * (and any caller that isn't a DOCTOR) is unrestricted here, matching the existing
-     * @PreAuthorize rules on the controller endpoints.
-     */
+
     private void assertCallerOwnsDoctorId(String doctorId) {
         if (isCallerDoctor()) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
