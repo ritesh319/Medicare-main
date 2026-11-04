@@ -6,6 +6,7 @@ import { adminApi, appointmentsApi } from '../../api'
 export default function AdminDashboard() {
   const [stats, setStats]             = useState(null)
   const [appointments, setAppointments] = useState([])
+  const [pendingDoctors, setPendingDoctors] = useState([])
   const [loading, setLoading]         = useState(true)
 
   useEffect(() => {
@@ -15,13 +16,21 @@ export default function AdminDashboard() {
           adminApi.getDashboardStats(),
           appointmentsApi.getAll(),
         ])
+        const applications = await adminApi.getPendingDoctors()
         setStats(s)
         setAppointments(appts.slice(0, 8))
+        setPendingDoctors(applications)
       } catch (_) {}
       finally { setLoading(false) }
     }
     load()
   }, [])
+
+  async function decideDoctor(id, approved) {
+    if (approved) await adminApi.approveDoctor(id)
+    else await adminApi.rejectDoctor(id)
+    setPendingDoctors(current => current.filter(doctor => doctor.id !== id))
+  }
 
   return (
     <DashboardLayout>
@@ -43,6 +52,40 @@ export default function AdminDashboard() {
             <StatCard title="Completed" value={stats?.completedAppointments} icon="🎯" color="green"  />
             <StatCard title="Cancelled" value={stats?.cancelledAppointments} icon="❌" color="red"    />
           </div>
+
+          {/* Pending doctor applications and uploaded proof documents */}
+          {pendingDoctors.length > 0 && (
+            <div className="card mb-6 border border-amber-200 bg-amber-50/50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-lg font-semibold text-amber-900">Pending doctor applications</h2>
+                  <p className="text-sm text-amber-700">Review the uploaded proof document before approving.</p>
+                </div>
+                <span className="text-xs text-amber-700">{pendingDoctors.length} awaiting review</span>
+              </div>
+              <div className="space-y-3">
+                {pendingDoctors.map(doctor => (
+                  <div key={doctor.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white p-3">
+                    <div>
+                      <p className="font-medium text-gray-900">Dr. {doctor.firstName} {doctor.lastName}</p>
+                      <p className="text-xs text-gray-500">{doctor.specialization} · {doctor.qualification} · {doctor.licenseNumber}</p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3 text-sm">
+                      {doctor.proofDocumentUrl ? (
+                        <a href={doctor.proofDocumentUrl} target="_blank" rel="noreferrer" className="font-medium text-blue-600 hover:text-blue-800">
+                          View proof PDF
+                        </a>
+                      ) : (
+                        <span className="text-gray-400">No proof document</span>
+                      )}
+                      <button onClick={() => decideDoctor(doctor.id, true)} className="font-medium text-green-700">Approve</button>
+                      <button onClick={() => decideDoctor(doctor.id, false)} className="font-medium text-red-700">Reject</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Recent appointments table */}
           <div className="card">
