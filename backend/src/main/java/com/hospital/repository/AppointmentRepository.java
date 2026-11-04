@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -32,6 +33,14 @@ public interface AppointmentRepository extends MongoRepository<Appointment, Stri
 
     boolean existsByDoctorIdAndAppointmentDateAndTimeSlotAndStatusNot(
         String doctorId, LocalDate date, String timeSlot, AppointmentStatus status);
+
+    boolean existsByDoctorIdAndAppointmentDateAndTimeSlotAndStatusInAndIdNot(
+        String doctorId, LocalDate date, String timeSlot,
+        Collection<AppointmentStatus> statuses, String appointmentId);
+
+    boolean existsByPatientIdAndAppointmentDateAndStatusNotAndStartTimeLessThanAndEndTimeGreaterThan(
+        String patientId, LocalDate date, AppointmentStatus status,
+        String requestedEndTime, String requestedStartTime);
 
     long countByStatus(AppointmentStatus status);
 
